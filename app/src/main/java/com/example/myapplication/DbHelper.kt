@@ -1,4 +1,4 @@
-package com.elyeproj.simpledb
+package com.example.myapplication
 
 import android.content.ContentValues
 import android.content.Context
@@ -40,25 +40,25 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DbHelper.DATABASE_N
     }
 
     fun clearDb() {
-        writableDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE)
+        writableDatabase.execSQL("DROP TABLE IF EXISTS $DATABASE_TABLE")
         onCreate(writableDatabase)
     }
 
     companion object {
 
-        val KEY_ID = "_ID"
-        val KEY_NAME = "NAME"
-        val KEY_VALUE = "VALUE"
-        val DATABASE_TABLE = "simpletable"
+        const val KEY_ID = "_ID"
+        const val KEY_NAME = "NAME"
+        const val KEY_VALUE = "VALUE"
+        const val DATABASE_TABLE = "simpletable"
         var RESULT_COLUMNS = arrayOf(KEY_ID, KEY_NAME, KEY_VALUE)
 
         private val TAG = DbHelper::class.java.simpleName
 
-        private val DATABASE_NAME = "simpledatabase.sqlite"
-        private val DATABASE_VERSION = 2
+        private const val DATABASE_NAME = "simpledatabase.sqlite"
+        private const val DATABASE_VERSION = 2
 
-        private val DATABASE_CREATE =
-                "CREATE TABLE $DATABASE_TABLE ($KEY_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "$KEY_NAME TEXT NOT NULL, $KEY_VALUE INTEGER DEFAULT 0);"
+        private const val DATABASE_CREATE =
+            "CREATE TABLE $DATABASE_TABLE ($KEY_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "$KEY_NAME TEXT NOT NULL, $KEY_VALUE INTEGER DEFAULT 0);"
     }
 }

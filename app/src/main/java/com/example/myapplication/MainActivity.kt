@@ -1,44 +1,48 @@
-package com.elyeproj.simpledb
+package com.example.myapplication
 
 import android.content.ContentValues
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
-import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var dbHelper: DbHelper
 
-    lateinit var dbHelper: DbHelper
+    private lateinit var txtAllData: TextView
+    private lateinit var editEntry: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         dbHelper = DbHelper(this)
+        txtAllData = findViewById(R.id.txt_all_data)
+        editEntry = findViewById(R.id.edit_entry)
         loadData()
     }
 
     private fun loadData() {
-        var result: String = ""
+        var result = ""
         val cursor = dbHelper.writableDatabase.query(DbHelper.DATABASE_TABLE, DbHelper.RESULT_COLUMNS,
-                null, null, null, null, DbHelper.KEY_ID)
-        val INDEX_COLUMN_NAME = cursor.getColumnIndexOrThrow(DbHelper.KEY_NAME)
-        val INDEX_COLUMN_VALUE = cursor.getColumnIndexOrThrow(DbHelper.KEY_VALUE)
+            null, null, null, null, DbHelper.KEY_ID)
+        val indexColumnName = cursor.getColumnIndexOrThrow(DbHelper.KEY_NAME)
+        val indexColumnValue = cursor.getColumnIndexOrThrow(DbHelper.KEY_VALUE)
         while (cursor != null && cursor.moveToNext()) {
-            result += "${cursor.getString(INDEX_COLUMN_NAME)}(${cursor.getInt(INDEX_COLUMN_VALUE)})-"
+            result += "${cursor.getString(indexColumnName)}(${cursor.getInt(indexColumnValue)})-"
         }
-        txt_all_data.text = result
+        txtAllData.text = result
     }
 
     fun insertData(view: View) {
-        if (!TextUtils.isEmpty(edit_entry.text)) {
+        if (!TextUtils.isEmpty(editEntry.text)) {
             val newValue = ContentValues()
-            val strValue = edit_entry.text.toString()
+            val strValue = editEntry.text.toString()
             newValue.put(DbHelper.KEY_NAME, strValue)
             newValue.put(DbHelper.KEY_VALUE, strValue.length)
             dbHelper.writableDatabase.insert(DbHelper.DATABASE_TABLE, null, newValue)
-            edit_entry.text.clear()
+            editEntry.text.clear()
             loadData()
         }
     }
